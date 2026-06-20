@@ -97,3 +97,14 @@ INSERT INTO missions (
         false,
         null
     );
+
+INSERT INTO items (id, name, item_type, price, image_url)
+VALUES
+    (1, '원목 책상', 'FURNITURE', 5000, '/items/desk.png');
+
+ALTER TABLE users ALTER COLUMN id RESTART WITH 2;
+ALTER TABLE categories ALTER COLUMN id RESTART WITH 4;
+ALTER TABLE rooms ALTER COLUMN id RESTART WITH 2;
+ALTER TABLE expenses ALTER COLUMN id RESTART WITH 2;
+ALTER TABLE missions ALTER COLUMN id RESTART WITH 3;
+ALTER TABLE items ALTER COLUMN id RESTART WITH 2;

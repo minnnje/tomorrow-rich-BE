@@ -204,7 +204,30 @@ public enum ErrorCode {
             "INVALID_MONTH_FORMAT",
             "월 형식 오류",
             "월 형식이 올바르지 않습니다."
-    );
+    ),
+    ROOM_NOT_FOUND(
+            HttpStatus.NOT_FOUND,
+            "ROOM_NOT_FOUND",
+            "방 정보 없음",
+            "방 정보를 찾을 수 없습니다."
+    ),
+
+    ITEM_NOT_OWNED(
+            HttpStatus.NOT_FOUND,
+            "ITEM_NOT_OWNED",
+            "보유하지 않은 아이템",
+            "보유하지 않은 아이템입니다."
+    ),
+
+    ITEM_NOT_APPLIED(
+            HttpStatus.NOT_FOUND,
+            "ITEM_NOT_APPLIED",
+            "적용 중인 아이템 아님",
+            "적용 중인 아이템이 아닙니다."
+    ),
+
+    ;
+
 
     private final HttpStatus status;
     private final String code;
