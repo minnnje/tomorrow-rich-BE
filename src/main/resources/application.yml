@@ -14,12 +14,17 @@ spring:
       path: /h2-console
 
   jpa:
+    defer-datasource-initialization: true
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
         format_sql: true
         show_sql: true
+
+  sql:
+    init:
+      mode: always
 
 jwt:
   secret: tomorrow-rich-secret-key-tomorrow-rich-secret-key
