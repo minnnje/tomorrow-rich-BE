@@ -205,6 +205,31 @@ public enum ErrorCode {
             "월 형식 오류",
             "월 형식이 올바르지 않습니다."
     ),
+
+    // Calendar
+    INVALID_DATE_FORMAT(
+            HttpStatus.BAD_REQUEST,
+            "INVALID_DATE_FORMAT",
+            "날짜 형식 오류",
+            "날짜 형식이 올바르지 않습니다."
+    ),
+
+    // Mypage / User
+    MYPAGE_LOAD_FAILED(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            "MYPAGE_LOAD_FAILED",
+            "사용자 정보 조회 실패",
+            "사용자 정보를 불러오지 못했어요."
+    ),
+
+    INVALID_SAVING_GOAL(
+            HttpStatus.BAD_REQUEST,
+            "INVALID_SAVING_GOAL",
+            "목표 금액 입력 오류",
+            "올바른 목표 금액을 입력해 주세요."
+    ),
+
+    // Room
     ROOM_NOT_FOUND(
             HttpStatus.NOT_FOUND,
             "ROOM_NOT_FOUND",
@@ -224,9 +249,7 @@ public enum ErrorCode {
             "ITEM_NOT_APPLIED",
             "적용 중인 아이템 아님",
             "적용 중인 아이템이 아닙니다."
-    ),
-
-    ;
+    );
 
 
     private final HttpStatus status;
