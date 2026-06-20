@@ -11,6 +11,9 @@ import com.likelion.tomorrowrich.mission.entity.MissionStatus;
 import com.likelion.tomorrowrich.mission.repository.MissionRepository;
 import com.likelion.tomorrowrich.room.entity.Room;
 import com.likelion.tomorrowrich.room.repository.RoomRepository;
+import com.likelion.tomorrowrich.shop.entity.Item;
+import com.likelion.tomorrowrich.shop.entity.UserItem;
+import com.likelion.tomorrowrich.shop.repository.UserItemRepository;
 import com.likelion.tomorrowrich.user.entity.User;
 import com.likelion.tomorrowrich.user.repository.UserRepository;
 import java.time.LocalDate;
@@ -31,17 +34,20 @@ public class HomeService {
     private final ExpenseRepository expenseRepository;
     private final MissionRepository missionRepository;
     private final RoomRepository roomRepository;
+    private final UserItemRepository userItemRepository;
 
     public HomeService(
             UserRepository userRepository,
             ExpenseRepository expenseRepository,
             MissionRepository missionRepository,
-            RoomRepository roomRepository
+            RoomRepository roomRepository,
+            UserItemRepository userItemRepository
     ) {
         this.userRepository = userRepository;
         this.expenseRepository = expenseRepository;
         this.missionRepository = missionRepository;
         this.roomRepository = roomRepository;
+        this.userItemRepository = userItemRepository;
     }
 
     public HomeResponseDTO getHome(Long userId) {
@@ -49,10 +55,7 @@ public class HomeService {
 
         Integer monthlyBudget = defaultValue(user.getMonthlyBudget());
         Integer monthlySavingGoal = defaultValue(user.getMonthlySavingGoal());
-        /*
-         * TODO:
-         * 추후 포인트 도메인이 별도 정책을 가지게 되면 PointService 또는 PointRepository를 통해 조회하도록 변경해야 함.
-         */
+
         Integer point = defaultValue(user.getCurrentPoint());
 
         Integer monthlyExpenseAmount = calculateMonthlyExpenseAmount(user);
@@ -147,17 +150,6 @@ public class HomeService {
 
         return BudgetStatus.NORMAL;
     }
-    /*
- * TODO:
- * 말풍선 조건이 여러 개 동시에 해당될 수 있어 현재는 아래 우선순위를 임시로 적용
- *
- * 1. 이번 달 예산 초과
- * 2. 오늘 사용 가능 금액 초과
- * 3. 이번 달 남은 예산 20% 이하
- * 4. 오늘 사용 가능 금액 30% 이하
- * 5. 오늘 미션 미완료
- * 6. 정상
- */
 
     private HomeResponseDTO.SpeechBubble createSpeechBubble(
             Integer monthlyBudget,
@@ -242,22 +234,25 @@ public class HomeService {
 
         return new HomeResponseDTO.RoomInfo(
                 backgroundImageUrl,
-                getDefaultAppliedItems()
+                getAppliedItems(user)
         );
     }
 
-    private List<HomeResponseDTO.AppliedItem> getDefaultAppliedItems() {
-        /*
-         * 현재 Room 엔티티에는 backgroundImageUrl만 존재하고,
-         * 실제 적용 아이템을 조회할 수 있는 Item/Inventory/AppliedItem 도메인이 없어 기본 벽지 아이템을 임시로 반환
-         */
-        return List.of(
-                new HomeResponseDTO.AppliedItem(
-                        1L,
-                        "WALLPAPER",
-                        "기본 벽지",
-                        "/items/wallpaper-default.png"
-                )
+    private List<HomeResponseDTO.AppliedItem> getAppliedItems(User user) {
+        return userItemRepository.findAllByUserAndAppliedTrue(user)
+                .stream()
+                .map(this::toAppliedItem)
+                .toList();
+    }
+
+    private HomeResponseDTO.AppliedItem toAppliedItem(UserItem userItem) {
+        Item item = userItem.getItem();
+
+        return new HomeResponseDTO.AppliedItem(
+                item.getId(),
+                item.getItemType().name(),
+                item.getName(),
+                item.getImageUrl()
         );
     }
 
@@ -266,10 +261,6 @@ public class HomeService {
 
         return missionRepository.findAllByUserAndMissionDate(user, today)
                 .stream()
-                /*
-                 * TODO:
-                 * 홈 화면에는 오늘 미션 일부만 노출하기 위해 현재 최대 2개만 반환되는 걸로 했습니다
-                 */
                 .limit(2)
                 .map(this::toTodayMission)
                 .toList();
