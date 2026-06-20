@@ -46,6 +46,7 @@ public enum ErrorCode {
             "서버 오류가 발생했습니다."
     ),
 
+    // Auth
     DUPLICATED_LOGIN_ID(
             HttpStatus.CONFLICT,
             "DUPLICATED_LOGIN_ID",
@@ -81,6 +82,7 @@ public enum ErrorCode {
             "아이디를 입력해 주세요."
     ),
 
+    // Onboarding
     EMPTY_NICKNAME(
             HttpStatus.BAD_REQUEST,
             "EMPTY_NICKNAME",
@@ -109,6 +111,7 @@ public enum ErrorCode {
             "이미 온보딩을 완료했습니다."
     ),
 
+    // Expense
     INVALID_EXPENSE_AMOUNT(
             HttpStatus.BAD_REQUEST,
             "INVALID_EXPENSE_AMOUNT",
@@ -137,6 +140,7 @@ public enum ErrorCode {
             "소비 기록을 찾을 수 없습니다."
     ),
 
+    // Mission
     MISSION_NOT_FOUND(
             HttpStatus.NOT_FOUND,
             "MISSION_NOT_FOUND",
@@ -165,11 +169,41 @@ public enum ErrorCode {
             "아직 완료할 수 없는 미션입니다."
     ),
 
+    // Shop / Item
     INVALID_ITEM_TYPE(
             HttpStatus.BAD_REQUEST,
             "INVALID_ITEM_TYPE",
-            "잘못된 아이템 타입",
+            "아이템 타입 오류",
             "아이템 타입이 올바르지 않습니다."
+    ),
+
+    ITEM_NOT_FOUND(
+            HttpStatus.NOT_FOUND,
+            "ITEM_NOT_FOUND",
+            "아이템 없음",
+            "아이템을 찾을 수 없습니다."
+    ),
+
+    NOT_ENOUGH_POINT(
+            HttpStatus.BAD_REQUEST,
+            "NOT_ENOUGH_POINT",
+            "포인트 부족",
+            "포인트가 부족합니다."
+    ),
+
+    ITEM_ALREADY_OWNED(
+            HttpStatus.CONFLICT,
+            "ITEM_ALREADY_OWNED",
+            "이미 구매한 아이템",
+            "이미 구매한 아이템입니다."
+    ),
+
+    // Point
+    INVALID_MONTH_FORMAT(
+            HttpStatus.BAD_REQUEST,
+            "INVALID_MONTH_FORMAT",
+            "월 형식 오류",
+            "월 형식이 올바르지 않습니다."
     );
 
     private final HttpStatus status;
