@@ -29,6 +29,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String requestURI = request.getRequestURI();
+
+        return request.getMethod().equals("OPTIONS")
+                || requestURI.startsWith("/api/auth/")
+                || requestURI.startsWith("/h2-console")
+                || requestURI.equals("/favicon.ico");
+    }
+
+    @Override
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
